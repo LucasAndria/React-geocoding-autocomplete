@@ -1,5 +1,7 @@
+import Autocomplete from "./components/Autocomplete";
+
 function App() {
-  return <h1>React Autocomplete</h1>;
+  return <Autocomplete />;
 }
 
 export default App;
