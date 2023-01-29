@@ -1,17 +1,7 @@
 .container {
   position: relative;
-  width: 20em;
-  min-height: 1.5em;
-  border: 0.05em solid #777;
-  display: flex;
-  align-items: center;
-  padding: 0.5em;
-  border-radius: 0.25em;
-  outline: none;
-}
-
-.container:focus-within {
-  border-color: hsl(200, 100%, 50%);
+  width: min-content;
+  height: auto;
 }
 
 .value {
@@ -20,21 +10,6 @@
   color: rgb(41, 47, 47);
   outline: none;
   border: none;
-}
-
-.clear-btn {
-  background: none;
-  color: #777;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 0;
-  font-size: 1.25em;
-}
-
-.clear-btn:focus,
-.clear-btn:hover {
-  color: rgb(159, 62, 62);
 }
 
 .options {
@@ -49,8 +24,9 @@
   border-radius: 0.25em;
   width: 100%;
   left: 0;
-  top: calc(100% + 0.25em);
+  top: calc(100% + 0.05em);
   background-color: white;
+  white-space: nowrap;
   z-index: 10;
 }
 
@@ -63,11 +39,16 @@
   cursor: pointer;
 }
 
-.option.selected {
-  background-color: hsl(200, 100%, 70%);
-}
-
 .option.highlighted {
   background-color: hsl(200, 100%, 50%);
   color: white;
+}
+
+.option.error {
+  color: rgb(255, 0, 0);
+}
+
+.option.error:hover {
+  color: white;
+  background-color: rgb(255, 100, 100);
 }
