@@ -1,6 +1,6 @@
 import axios from "axios";
 
-function handleError(err) {
+function handleErrorCallAPI(err) {
   if (err.message === "Network Error") {
     return {
       handledError: true,
@@ -16,7 +16,7 @@ function handleError(err) {
   };
 }
 
-async function openrouteservice(text) {
+async function api_openrouteservice(text) {
   try {
     /* Call the openrouteservice api to get the geocoding with the text */
     const res = await axios({
@@ -46,10 +46,13 @@ async function openrouteservice(text) {
       };
     });
 
-    return { features, bbox: data?.bbox, text: data?.geocoding?.query?.text };
+    return {
+      statusText: "success",
+      data: { features, bbox: data?.bbox, text: data?.geocoding?.query?.text },
+    };
   } catch (err) {
-    return handleError(err);
+    return handleErrorCallAPI(err);
   }
 }
 
-export { openrouteservice };
+export { api_openrouteservice };
