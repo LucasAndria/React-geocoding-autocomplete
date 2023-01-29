@@ -1,60 +1,34 @@
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../autocomplete.module.css";
+import { openrouteservice } from "../assets/API_calls";
 
-const AutocompleteInput = () => {
+const AutocompleteInput = ({ children }) => {
   const containerRef = useRef(null);
-  const inputRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(true);
-  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [autocomplete_response, setAutocomplete_response] = useState([]);
 
-  function isOptionSelected(option) {
-    return option === 1;
-  }
+  // autocomplete_response = [{label: "", value: ""}];
+  let autocomplete_timeout;
 
-  useEffect(() => {
-    if (isOpen) setHighlightedIndex(0);
-  }, [isOpen]);
+  const handleChange = (e) => {
+    const value = e.target.value;
+    if (value === "") return;
+    if (autocomplete_timeout) clearTimeout(autocomplete_timeout);
+
+    autocomplete_timeout = setTimeout(async () => {
+      const response = await openrouteservice(value);
+      console.log("called");
+      setAutocomplete_response(response.features);
+    }, 300);
+  };
 
   return (
-    <div
-      ref={containerRef}
-      onClick={() => inputRef.current.focus()}
-      onBlur={() => setIsOpen(false)} // Excécute a fonction when somewhere else is clicked
-      tabIndex={0} // To enable the unFocus style when somewhere else is clicked
-      className={styles.container}
-    >
-      <input ref={inputRef} type="text" className={styles.value} />
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          inputRef.current.value = "";
-        }}
-        className={styles["clear-btn"]}
-      >
-        &times;
-      </button>
-      <ul className={`${styles.options} ${isOpen ? styles.show : ""}`}>
-        {[
-          { label: "one", value: 1 },
-          { label: "two", value: 2 },
-        ].map((option, index) => (
-          <li
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log(`${option} has been selected`);
-              setIsOpen(false);
-            }}
-            onMouseEnter={() => setHighlightedIndex(index)}
-            key={option.value}
-            className={`${styles.option} ${
-              isOptionSelected(option) ? styles.selected : ""
-            } ${index === highlightedIndex ? styles.highlighted : ""}`}
-          >
-            {option.label}
-          </li>
-        ))}
-      </ul>
+    <div ref={containerRef}>
+      {React.cloneElement(children, { onChange: handleChange })}
+      {autocomplete_response.map((response) => (
+        <div key={response.id} onClick={() => console.log(response)}>
+          {response.label}
+        </div>
+      ))}
     </div>
   );
 };

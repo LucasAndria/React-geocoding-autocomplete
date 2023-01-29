@@ -1,7 +1,11 @@
 import Autocomplete from "./components/Autocomplete";
 
 function App() {
-  return <Autocomplete />;
+  return (
+    <Autocomplete>
+      <input type="text" />
+    </Autocomplete>
+  );
 }
 
 export default App;
